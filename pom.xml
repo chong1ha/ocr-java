@@ -43,6 +43,7 @@
 		<deploy.target.dir>C:/apps/ocr-java</deploy.target.dir>
 
 		<!-- 의존성 라이브러리 버전 별도 관리 -->
+		<tess4j.v>5.12.0</tess4j.v>
 	</properties>
 
 	<!-- Add typical dependencies for a web application -->
@@ -64,7 +65,12 @@
 			<scope>test</scope>
 		</dependency>
 
-
+		<!--	tesseract OCR	-->
+		<dependency>
+			<groupId>net.sourceforge.tess4j</groupId>
+			<artifactId>tess4j</artifactId>
+			<version>${tess4j.v}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
