@@ -88,7 +88,7 @@ public class ArgumentParser implements ApplicationRunner {
             throw new IllegalArgumentException("imgFilePath is empty");
         }
 
-        Tesseract tesseract = new Tesseract();
+        Tesseract tesseract = getTesseract();
 
         File file = new File(imgFilePath);
         if (!file.exists() || !file.isFile()) {
@@ -102,5 +102,16 @@ public class ArgumentParser implements ApplicationRunner {
         } catch (TesseractException e) {
             throw e;
         }
+    }
+
+    private static Tesseract getTesseract() {
+
+        Tesseract instance = new Tesseract();
+
+        instance.setDatapath("H:/OCR/tesseract/tessdata_best-main");
+        //instance.setLanguage("kor");
+        instance.setLanguage("eng");
+
+        return instance;
     }
 }
