@@ -108,9 +108,10 @@ public class ArgumentParser implements ApplicationRunner {
 
         Tesseract instance = new Tesseract();
 
-        instance.setDatapath("H:/OCR/tesseract/tessdata_best-main");
         //instance.setLanguage("kor");
         instance.setLanguage("eng");
+        instance.setOcrEngineMode(1);
+        instance.setDatapath("H:/OCR/tesseract/tessdata_best-main");
 
         return instance;
     }
