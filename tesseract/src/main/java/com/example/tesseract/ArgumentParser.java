@@ -1,6 +1,6 @@
-package com.example.ocr_java;
+package com.example.tesseract;
 
-import com.example.ocr_java.util.StringUtil;
+import com.example.core.util.StringUtil;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.boot.ApplicationArguments;
@@ -14,8 +14,8 @@ import java.util.Optional;
  * 인자(arguments) 옵션 처리
  *
  * @author gunha
- * @version 0.1
- * @since 2024-07-03 오후 3:51
+ * @version 1.0
+ * @since 2024-07-04 오전 9:42
  */
 @Component
 public class ArgumentParser implements ApplicationRunner {
@@ -42,7 +42,7 @@ public class ArgumentParser implements ApplicationRunner {
      */
     private void processOptions(ApplicationArguments args) throws IllegalArgumentException, TesseractException {
 
-        // "--f=D:\Screenshot_1.png"
+        //
         // 옵션 f. 이미지 파일경로
         String imgFilePath = "";
 

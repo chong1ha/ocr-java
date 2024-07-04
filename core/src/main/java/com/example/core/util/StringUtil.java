@@ -1,11 +1,13 @@
-package com.example.ocr_java.util;
+package com.example.core.util;
 
 import java.util.Optional;
 
 /**
+ * 문자열 관련 공통 유틸리티
+ *
  * @author gunha
- * @version 0.1
- * @since 2024-07-03 오후 4:26
+ * @version 1.0
+ * @since 2024-07-04 오전 9:35
  */
 public class StringUtil {
 
