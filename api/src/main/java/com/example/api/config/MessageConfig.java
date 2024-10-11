@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
+ * MessageSource 설정
+ *
  * @author gunha
  * @version 1.0
  * @since 2024-10-11 오후 3:04
