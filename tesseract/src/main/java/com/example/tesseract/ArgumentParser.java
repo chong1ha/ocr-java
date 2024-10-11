@@ -1,5 +1,6 @@
 package com.example.tesseract;
 
+import com.example.core.util.ImgFileValidator;
 import com.example.core.util.StringUtil;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -8,6 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -63,10 +65,17 @@ public class ArgumentParser implements ApplicationRunner {
             }
         }
 
-        // 확장자 체크
-        if (!imgFilePath.endsWith(".png") && !imgFilePath.endsWith(".jpg") && !imgFilePath.endsWith(".jpeg")) {
-            throw new IllegalArgumentException("The File must have a .png, .jpg, or .jpeg extension");
+        // 파일 형식 검증 (매직 넘버 검사)
+        ImgFileValidator validator = new ImgFileValidator();
+        try {
+
+            if (!validator.isValidImg(imgFilePath)) {
+                throw new IllegalArgumentException("Invalid Image File");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
 
         // Text Detection 수행
         try {
@@ -108,10 +117,10 @@ public class ArgumentParser implements ApplicationRunner {
 
         Tesseract instance = new Tesseract();
 
-        //instance.setLanguage("kor");
-        instance.setLanguage("eng");
+        instance.setLanguage("kor");
+        //instance.setLanguage("eng");
         instance.setOcrEngineMode(1);
-        instance.setDatapath("H:/OCR/tesseract/tessdata_best-main");
+        instance.setDatapath("E:/3.Study/OCR/tesseract/tessdata_best-main");
 
         return instance;
     }
