@@ -8,6 +8,9 @@ function DropFile(dropAreaId) {
 
     let dropArea = document.getElementById(dropAreaId);
 
+    let selectedFile = null;
+    let saveButton = document.getElementById('saveImage');
+
     function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -45,6 +48,9 @@ function DropFile(dropAreaId) {
         // 이미지 타입인지 확인
         if (file.type.startsWith("image/")) {
             renderFile(file);
+
+            selectedFile = file;
+            saveButton.disabled = false;
         } else {
             alert("이미지 파일만 업로드할 수 있습니다.");
         }
@@ -61,14 +67,45 @@ function DropFile(dropAreaId) {
         };
     }
 
+    // 이미지 파일을 서버로 업로드
+    async function saveImage() {
+
+        if (selectedFile) {
+            let formData = new FormData();
+            formData.append("chooseFile", selectedFile);
+
+            try {
+                let response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert("이미지가 성공적으로 저장되었습니다.");
+                    // 저장 후 Save 버튼 비활성화
+                    saveButton.disabled = true;
+                } else {
+                    alert("이미지 저장에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("업로드 중 오류 발생:", error);
+                alert("업로드 중 오류가 발생했습니다.");
+            }
+        }
+    }
+
     // Drag 관련 EventListener
     dropArea.addEventListener("dragenter", highlight, false);
     dropArea.addEventListener("dragover", highlight, false);
     dropArea.addEventListener("dragleave", unhighlight, false);
     dropArea.addEventListener("drop", handleDrop, false);
 
+    // Save Button Click
+    saveButton.addEventListener("click", saveImage);
+
     return {
-        handleFiles
+        handleFiles,
+        saveImage
     };
 }
 

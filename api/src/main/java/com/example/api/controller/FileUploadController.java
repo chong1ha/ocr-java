@@ -1,5 +1,7 @@
 package com.example.api.controller;
 
+import com.example.core.util.ImgFileValidator;
+import com.example.core.util.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,23 +43,38 @@ public class FileUploadController {
     public String uploadFile(@RequestParam("chooseFile") MultipartFile file,
                              RedirectAttributes redirectAttributes) {
 
+        // 비어있는지
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "파일이 비어 있습니다.");
             return "redirect:/";
         }
 
-        // 파일 저장
-        try {
-            String fileName = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
+        if (StringUtil.isEmpty(fileName)) {
+            redirectAttributes.addFlashAttribute("message", "파일 이름이 유효하지 않습니다.");
+            return "redirect:/";
+        }
 
-            File destinationFile = new File("C:/Users/gunha/OneDrive/바탕 화면" + File.separator + fileName);
+        ImgFileValidator validator = new ImgFileValidator();
+
+        String imgFilePath = "D:" + File.separator + fileName;
+        try {
+            File destinationFile = new File(imgFilePath);
             file.transferTo(destinationFile);
+
+            if (!validator.isValidImg(imgFilePath)) {
+                destinationFile.delete(); // 파일 삭제
+                redirectAttributes.addFlashAttribute("message", "허용되지 않는 파일 형식입니다.");
+                return "redirect:/";
+            }
 
             // success
             redirectAttributes.addFlashAttribute("message", "파일 '" + fileName + "'이 성공적으로 업로드되었습니다.");
         } catch (IOException e) {
             // fail
             redirectAttributes.addFlashAttribute("message", "파일 업로드 중 오류가 발생했습니다: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
 
         return "redirect:/";

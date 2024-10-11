@@ -85,6 +85,26 @@
     display: none;
 }
 
+/* Save Image 버튼 스타일 설정 */
+.save-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 65%;
+    height: 40px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+/* Save Image 버튼 비활성화 스타일 */
+.save-button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
 /* 반응형 디자인 설정: 화면 너비가 700px 이하일 때 */
 @media (max-width: 700px) {
     .contents {

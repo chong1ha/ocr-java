@@ -22,6 +22,8 @@
 
                 <label class="file-label" for="chooseFile" th:text="#{file.upload.chooseFile}">Choose File</label>
                 <input class="file" id="chooseFile" type="file" onchange="dropFile.handleFiles(this.files)" accept="image/png, image/jpeg, image/gif">
+
+                <button class="save-button" id="saveImage" th:text="#{file.upload.saveImage}" disabled>Save Image</button>
             </div>
         </div>
     </div>
