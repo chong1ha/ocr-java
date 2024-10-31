@@ -2,6 +2,12 @@ package com.example.api.controller;
 
 import com.example.core.util.ImgFileValidator;
 import com.example.core.util.StringUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +25,10 @@ import java.io.IOException;
  * @version 1.0
  * @since 2024-10-11 오전 11:26
  */
+@Tag(
+        name = "OCR Image Upload"
+        , description = "업로드 관련 API"
+)
 @Controller
 public class FileUploadController {
 
@@ -27,6 +37,10 @@ public class FileUploadController {
      *
      * @return index view
      */
+    @Operation(
+            summary = "메인 페이지"
+            , description = "OCR 이미지 업로드를 위한 메인 페이지"
+    )
     @GetMapping("/")
     public String index() {
         return "index";
@@ -39,8 +53,26 @@ public class FileUploadController {
      * @param redirectAttributes redirect 시에 플래시 속성을 전달하는 객체
      * @return 업로드 후, redirect 할 URL
      */
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("chooseFile") MultipartFile file,
+    @Operation(
+            summary = "이미지 파일 업로드"
+            , description = "사용자가 업로드한 파일 처리"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "파일 업로드 성공"),
+            @ApiResponse(responseCode = "400", description = "파일 업로드 실패 (예: 비어있는 파일, 허용되지 않는 형식)"),
+            @ApiResponse(responseCode = "500", description = "서버 오류 발생")
+    })
+    @PostMapping(
+            value = "/upload"
+            , consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+            , produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public String uploadFile(
+            @Parameter(
+                    name = "chooseFile"
+                    , description = "업로드할 파일"
+                    , required = true
+            ) @RequestParam("chooseFile") MultipartFile file,
                              RedirectAttributes redirectAttributes) {
 
         // 비어있는지
