@@ -1,7 +1,7 @@
 package com.example.core.util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 /**
@@ -13,27 +13,31 @@ import java.util.Arrays;
  */
 public abstract class FileValidator {
 
-    protected abstract FileSignature getFileSignature();
-
     /**
      * 파일 유효성 검사
      *
-     * @param filePath 검증할 파일경로
+     * @param inputStream 검증할 파일의 InputStream
+     * @param fileType 파일 유형
      * @throws IOException 파일 입출력 예외
      * @return 매직넘버 일치하면 True
      */
-    public boolean validate(String filePath) throws IOException {
+    public boolean validate(InputStream inputStream, String fileType) throws IOException {
 
-        FileSignature signature = getFileSignature();
+        FileSignature signature = getFileSignature(fileType);
 
-        try (FileInputStream stream = new FileInputStream(filePath)) {
-
-            byte[] magicBytes = new byte[signature.getMagicNumber().length];
-            if (stream.read(magicBytes) != magicBytes.length) {
-                return false;
-            }
-
-            return Arrays.equals(magicBytes, signature.getMagicNumber());
+        byte[] magicBytes = new byte[signature.getMagicNumber().length];
+        if (inputStream.read(magicBytes) != magicBytes.length) {
+            return false;
         }
+
+        return Arrays.equals(magicBytes, signature.getMagicNumber());
     }
+
+    /**
+     * FileType에 맞는 FileSignature 반환
+     *
+     * @param fileType 파일 타입 (ex. "PNG", "JPEG")
+     * @return FileSignature
+     */
+    protected abstract FileSignature getFileSignature(String fileType);
 }

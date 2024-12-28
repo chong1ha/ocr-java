@@ -17,11 +17,11 @@
                 <div id="drop-file" class="drag-file">
                     <img src="/images/image-file.png" alt="파일 아이콘" class="image">
                     <p class="message" th:text="#{file.upload.dragMessage}">Drag files to upload</p>
-                    <img src="" alt="미리보기 이미지" class="preview">
+                    <img src="" alt="미리보기 이미지" class="preview" style="display:none;">
                 </div>
 
                 <label class="file-label" for="chooseFile" th:text="#{file.upload.chooseFile}">Choose File</label>
-                <input class="file" id="chooseFile" type="file" onchange="dropFile.handleFiles(this.files)" accept="image/png, image/jpeg, image/gif">
+                <input class="file" id="chooseFile" type="file" onchange="dropFile.handleFiles(this.files)" accept="image/png, image/jpeg, image/gif" name="chooseFiles" multiple>
 
                 <button class="save-button" id="saveImage" th:text="#{file.upload.saveImage}" disabled>Save Image</button>
             </div>

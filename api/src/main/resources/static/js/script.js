@@ -52,7 +52,7 @@ function DropFile(dropAreaId) {
             selectedFile = file;
             saveButton.disabled = false;
         } else {
-            alert("이미지 파일만 업로드할 수 있습니다.");
+            alert("Only image files are allowed");
         }
     }
 
@@ -72,7 +72,7 @@ function DropFile(dropAreaId) {
 
         if (selectedFile) {
             let formData = new FormData();
-            formData.append("chooseFile", selectedFile);
+            formData.append("chooseFiles", selectedFile);
 
             try {
                 let response = await fetch("/upload", {
@@ -81,15 +81,15 @@ function DropFile(dropAreaId) {
                 });
 
                 if (response.ok) {
-                    alert("이미지가 성공적으로 저장되었습니다.");
+                    alert("Image uploaded successfully");
                     // 저장 후 Save 버튼 비활성화
                     saveButton.disabled = true;
                 } else {
-                    alert("이미지 저장에 실패했습니다.");
+                    alert("Failed to upload image");
                 }
             } catch (error) {
-                console.error("업로드 중 오류 발생:", error);
-                alert("업로드 중 오류가 발생했습니다.");
+                console.error("Error occurred during upload:", error);
+                alert("An error occurred during the upload");
             }
         }
     }
