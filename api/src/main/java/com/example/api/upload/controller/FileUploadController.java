@@ -1,5 +1,6 @@
 package com.example.api.upload.controller;
 
+import com.example.api.upload.dto.FileUploadRequest;
 import com.example.api.upload.service.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -77,8 +78,20 @@ public class FileUploadController {
             ) @RequestParam("chooseFiles") List<MultipartFile> files,
                              RedirectAttributes redirectAttributes) throws Exception {
 
+        long timestamp = System.currentTimeMillis();
+
         try {
-            String message = fileUploadService.uploadFiles(files);
+            String userId = "testUser";
+            String category = "testCategory";
+
+            FileUploadRequest uploadData = new FileUploadRequest(
+                    userId,
+                    category,
+                    timestamp,
+                    files
+            );
+
+            String message = fileUploadService.uploadFiles(uploadData);
             redirectAttributes.addFlashAttribute("message", message);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());

@@ -1,6 +1,7 @@
 package com.example.api.upload.service;
 
 import com.example.api.aws.s3.S3Service;
+import com.example.api.upload.dto.FileUploadRequest;
 import com.example.core.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,17 +27,17 @@ public class FileUploadService {
     /**
      * 다중 파일 업로드 처리
      *
-     * @param files 업로드된 파일들
+     * @param uploadData 파일 업로드 관련 데이터
      * @return 성공 메시지
      */
-    public String uploadFiles(List<MultipartFile> files) throws IOException {
+    public String uploadFiles(FileUploadRequest uploadData) throws IOException {
 
-        if (files == null || files.isEmpty()) {
-            return "File is empty or null";
+        if (uploadData == null || uploadData.files().isEmpty()) {
+            return "UploadData is empty or null";
         }
 
         // 다중 파일 처리
-        for (MultipartFile file : files) {
+        for (MultipartFile file : uploadData.files()) {
 
             if (file.isEmpty()) {
                 return "File is empty";
@@ -48,24 +49,31 @@ public class FileUploadService {
             }
 
             // Check MagicNumber
+            String fileType = extractFileType(file);
             try (InputStream inputStream = file.getInputStream()) {
 
-                String fileType = extractFileType(file);
                 if (!imgFileValidator.validate(inputStream, fileType)) {
                     return "Invalid Image Type";
                 }
             }
 
+            // 파일 이름 생성
+            String generatedFileName = FileNameGenerator.generate(
+                    uploadData.userId(),
+                    uploadData.category(),
+                    uploadData.timestamp(),
+                    fileType
+            );
+
             // S3 업로드
-            String uniqueFileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            String fileUrl = s3Service.uploadFile(file, uniqueFileName);
+            String fileUrl = s3Service.uploadFile(file, generatedFileName);
 
             // 업로드된 파일 URL
             System.out.println("File '" + fileName + "' has been successfully uploaded. S3 URL: " + fileUrl);
             System.out.println(s3Service.getFileList());
         }
 
-        return files.size() + " files have been successfully uploaded.";
+        return uploadData.files().size() + " files have been successfully uploaded.";
     }
 
     /**
