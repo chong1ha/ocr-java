@@ -1,5 +1,8 @@
-package com.example.api.controller;
+package com.example.api.upload.controller;
 
+import com.example.api.aws.s3.S3Service;
+import com.example.core.util.EncryptionUtil;
+import com.example.core.util.Encryptor;
 import com.example.core.util.ImgFileValidator;
 import com.example.core.util.StringUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,6 +10,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +37,10 @@ import java.io.IOException;
         , description = "업로드 관련 API"
 )
 @Controller
+@RequiredArgsConstructor
 public class FileUploadController {
+
+    private final S3Service s3Service;
 
     /**
      * 파일 업로드 페이지 반환
@@ -73,7 +83,7 @@ public class FileUploadController {
                     , description = "업로드할 파일"
                     , required = true
             ) @RequestParam("chooseFile") MultipartFile file,
-                             RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes) throws Exception {
 
         // 비어있는지
         if (file.isEmpty()) {
@@ -87,26 +97,30 @@ public class FileUploadController {
             return "redirect:/";
         }
 
-        ImgFileValidator validator = new ImgFileValidator();
 
-        String imgFilePath = "D:" + File.separator + fileName;
+        File tempFile = new File(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
+        file.transferTo(tempFile);
+
+        ImgFileValidator imgValidator = new ImgFileValidator();
+        System.out.println(fileName);
+        if (imgValidator.isValidImg(fileName) == false) {
+            tempFile.delete();
+            redirectAttributes.addFlashAttribute("message", "허용되지 않는 파일 형식입니다.");
+            return "redirect:/";
+        }
+
         try {
-            File destinationFile = new File(imgFilePath);
-            file.transferTo(destinationFile);
+            // S3 업로드
+            String fileUrl = s3Service.uploadFile(file, fileName);
+            System.out.println("11 : " + fileUrl);
+            System.out.println(s3Service.getFileList());
 
-            if (!validator.isValidImg(imgFilePath)) {
-                destinationFile.delete(); // 파일 삭제
-                redirectAttributes.addFlashAttribute("message", "허용되지 않는 파일 형식입니다.");
-                return "redirect:/";
-            }
+            // DB save
 
-            // success
+            // return
             redirectAttributes.addFlashAttribute("message", "파일 '" + fileName + "'이 성공적으로 업로드되었습니다.");
-        } catch (IOException e) {
-            // fail
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", "파일 업로드 중 오류가 발생했습니다: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
 
         return "redirect:/";

@@ -28,6 +28,8 @@
         <!-- 의존성 라이브러리 버전 별도 관리 -->
         <tess4j.v>5.12.0</tess4j.v>
         <swagger.v>2.6.0</swagger.v>
+        <aws.s3.v>2.29.40</aws.s3.v>
+        <jpa.v>3.4.0</jpa.v>
     </properties>
 
     <!-- Add typical dependencies for a web application -->
@@ -51,6 +53,20 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${swagger.v}</version>
         </dependency>
+
+        <!-- AWS S3 -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${aws.s3.v}</version>
+        </dependency>
+
+        <!--        &lt;!&ndash; JPA &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-data-jpa</artifactId>-->
+        <!--            <version>${jpa.v}</version>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
