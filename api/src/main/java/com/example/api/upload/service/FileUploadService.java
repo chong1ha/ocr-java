@@ -70,7 +70,10 @@ public class FileUploadService {
 
             // 업로드된 파일 URL
             System.out.println("File '" + fileName + "' has been successfully uploaded. S3 URL: " + fileUrl);
-            System.out.println(s3Service.getFileList());
+            s3Service.printAllFiles();
+            System.out.println("-----------");
+            System.out.println(s3Service.getFileList(
+                    String.format("%s/%s/2024/12/", uploadData.userId(), uploadData.category()), 1000));
         }
 
         return uploadData.files().size() + " files have been successfully uploaded.";

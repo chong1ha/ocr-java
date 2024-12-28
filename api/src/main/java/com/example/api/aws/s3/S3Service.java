@@ -36,9 +36,27 @@ public class S3Service {
      * @throws SdkException AWS SDK 예외
      */
     public List<String> getFileList() throws SdkException {
+        return getFileList(null, -1);
+    }
+
+    /**
+     * S3 버킷에서 특정조건에 따른 파일 목록 조회
+     *
+     * @param prefix 파일 경로를 필터링용 prefix
+     * @param maxKeys 조회할 최대 파일 수
+     * @return 파일 목록
+     * @throws SdkException AWS SDK 예외
+     */
+    public List<String> getFileList(String prefix, int maxKeys) throws SdkException {
+
+        String _prefix = prefix == null ? "" : prefix;
+        int _maxKeys = maxKeys > 0 ? maxKeys : 1000;
+
         try {
             ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                     .bucket(bucketName)
+                    .prefix(_prefix)
+                    .maxKeys(_maxKeys)
                     .build();
 
             ListObjectsV2Response response = s3Client.listObjectsV2(listObjectsRequest);
@@ -97,5 +115,13 @@ public class S3Service {
         } catch (SdkException e) {
             throw e;
         }
+    }
+
+    /**
+     * print용
+     */
+    public void printAllFiles() {
+        List<String> files = getFileList();
+        files.forEach(System.out::println);
     }
 }
