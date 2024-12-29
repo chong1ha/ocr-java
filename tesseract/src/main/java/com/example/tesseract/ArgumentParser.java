@@ -1,6 +1,5 @@
 package com.example.tesseract;
 
-import com.example.core.util.ImgFileValidator;
 import com.example.core.util.StringUtil;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -9,7 +8,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -64,18 +62,6 @@ public class ArgumentParser implements ApplicationRunner {
                 throw new IllegalArgumentException("Error processing command line arguments " + e.getMessage());
             }
         }
-
-        // 파일 형식 검증 (매직 넘버 검사)
-        ImgFileValidator validator = new ImgFileValidator();
-        try {
-
-            if (!validator.isValidImg(imgFilePath)) {
-                throw new IllegalArgumentException("Invalid Image File");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
 
         // Text Detection 수행
         try {

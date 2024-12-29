@@ -23,7 +23,7 @@
         <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 
         <!-- 배포 대상의 디렉토리 경로 설정 -->
-        <deploy.target.dir>C:/apps/ocr/paddleocr</deploy.target.dir>
+        <deploy.target.dir>${project.basedir}/target/deploy</deploy.target.dir>
 
         <!-- 의존성 라이브러리 버전 별도 관리 -->
         <paddle.v>0.27.0</paddle.v>

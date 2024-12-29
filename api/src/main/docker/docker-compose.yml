@@ -1,0 +1,19 @@
+services:
+  ocr-app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ocr-api:1.0
+    ports:
+      - 8081:8081
+    environment:
+      - APP_IV=${APP_IV}
+      - APP_SECRET_KEY=${APP_SECRET_KEY}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - TZ=Asia/Seoul
+    restart: on-failure
