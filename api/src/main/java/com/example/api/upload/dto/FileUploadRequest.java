@@ -10,7 +10,7 @@ import java.util.List;
  * @since 2024. 12. 29.
  */
 public record FileUploadRequest(
-        String userId,
+        Long userId,
         String category,
         long timestamp,
         List<MultipartFile> files

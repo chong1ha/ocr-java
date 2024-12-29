@@ -1,4 +1,4 @@
-package com.example.api.upload.service;
+package com.example.api.common;
 
 import jakarta.validation.constraints.NotNull;
 

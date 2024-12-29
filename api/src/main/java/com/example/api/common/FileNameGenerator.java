@@ -1,4 +1,4 @@
-package com.example.api.upload.service;
+package com.example.api.common;
 
 import com.example.core.util.DateUtil;
 
@@ -28,7 +28,7 @@ public class FileNameGenerator {
      * @param extension 파일 확장자
      * @return 고유한 파일이름
      */
-    public static String generate(String userId, String category, long timestamp, String extension) {
+    public static String generate(Long userId, String category, long timestamp, String extension) {
 
         String date = DateUtil.convertLongToDate(timestamp);
         String randomSuffix = generateRandomSuffix();
@@ -37,7 +37,7 @@ public class FileNameGenerator {
         FileNameTemplate template = new FileNameTemplate(TEMPLATE);
 
         Map<String, String> variables = new HashMap<>();
-        variables.put("userId", userId);
+        variables.put("userId", String.valueOf(userId));
         variables.put("category", category);
         variables.put("year", date.substring(0, 4));      // "yyyy"
         variables.put("month", date.substring(4, 6));     // "MM"

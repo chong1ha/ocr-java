@@ -1,4 +1,4 @@
-package com.example.api.upload.service;
+package com.example.api.common;
 
 import com.example.core.util.FileSignature;
 import com.example.core.util.FileValidator;

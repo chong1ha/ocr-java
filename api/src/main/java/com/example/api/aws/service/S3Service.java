@@ -1,4 +1,4 @@
-package com.example.api.aws.s3;
+package com.example.api.aws.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

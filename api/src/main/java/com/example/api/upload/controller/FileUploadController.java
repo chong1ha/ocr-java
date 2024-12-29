@@ -1,7 +1,8 @@
 package com.example.api.upload.controller;
 
+import com.example.api.db.service.UserService;
 import com.example.api.upload.dto.FileUploadRequest;
-import com.example.api.upload.service.FileUploadService;
+import com.example.api.aws.service.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,6 +35,7 @@ import java.util.List;
 public class FileUploadController {
 
     private final FileUploadService fileUploadService;
+    private final UserService userService;
 
     /**
      * 파일 업로드 페이지 반환
@@ -81,11 +83,12 @@ public class FileUploadController {
         long timestamp = System.currentTimeMillis();
 
         try {
-            String userId = "testUser";
+            // assumption
+            String userName = "testUser";
             String category = "testCategory";
 
             FileUploadRequest uploadData = new FileUploadRequest(
-                    userId,
+                    userService.getUserIdByUsername(userName),
                     category,
                     timestamp,
                     files

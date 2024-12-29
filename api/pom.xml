@@ -30,6 +30,7 @@
         <swagger.v>2.6.0</swagger.v>
         <aws.s3.v>2.29.40</aws.s3.v>
         <jpa.v>3.4.0</jpa.v>
+        <psql.v>42.7.4</psql.v>
     </properties>
 
     <!-- Add typical dependencies for a web application -->
@@ -61,12 +62,19 @@
             <version>${aws.s3.v}</version>
         </dependency>
 
-        <!--        &lt;!&ndash; JPA &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-data-jpa</artifactId>-->
-        <!--            <version>${jpa.v}</version>-->
-        <!--        </dependency>-->
+        <!-- JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${jpa.v}</version>
+        </dependency>
+
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${psql.v}</version>
+        </dependency>
     </dependencies>
 
     <build>

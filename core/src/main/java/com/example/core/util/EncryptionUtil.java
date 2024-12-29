@@ -29,10 +29,13 @@ public class EncryptionUtil {
      */
     public static String encrypt(String msg, String secretKey, String iv, String cipherMode, String paddingMode) throws Exception {
 
-        Cipher cipher = Cipher.getInstance(cipherMode + "/" + paddingMode + "/PKCS5Padding");
+        Cipher cipher = Cipher.getInstance(cipherMode + "/" + paddingMode);
 
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes());
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        byte[] decodedIv = Base64.getDecoder().decode(iv);
+
+        SecretKeySpec keySpec = new SecretKeySpec(decodedKey, "AES");
+        IvParameterSpec ivSpec = new IvParameterSpec(decodedIv);
 
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
 
@@ -54,10 +57,13 @@ public class EncryptionUtil {
      */
     public static String decrypt(String msg, String secretKey, String iv, String cipherMode, String paddingMode) throws Exception {
 
-        Cipher cipher = Cipher.getInstance(cipherMode + "/" + paddingMode + "/PKCS5Padding");
+        Cipher cipher = Cipher.getInstance(cipherMode + "/" + paddingMode);
 
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
-        IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes());
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        byte[] decodedIv = Base64.getDecoder().decode(iv);
+
+        SecretKeySpec keySpec = new SecretKeySpec(decodedKey, "AES");
+        IvParameterSpec ivSpec = new IvParameterSpec(decodedIv);
 
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 
