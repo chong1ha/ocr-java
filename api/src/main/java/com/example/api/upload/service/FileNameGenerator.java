@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public class FileNameGenerator {
 
-    private static final String TEMPLATE = "{userId}/{category}/{year}/{month}/{day}/receipt_{date}_{randomSuffix}.{extension}";
+    private static final String TEMPLATE = "{userId}/{category}/year={year}/month={month}/day={day}/receipt_{date}_{randomSuffix}.{extension}";
 
     /**
      * 파일 이름 생성 <br>
