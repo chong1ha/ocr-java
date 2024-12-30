@@ -23,6 +23,6 @@ public class Decryptor {
     private static String paddingMode = "PKCS5Padding";
 
     public static String decrypt(String msg) throws Exception {
-        return EncryptionUtil.decrypt(msg, key, iv, cipherMode, paddingMode);
+        return CryptographyUtil.decrypt(msg, key, iv, cipherMode, paddingMode);
     }
 }

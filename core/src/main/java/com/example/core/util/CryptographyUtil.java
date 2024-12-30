@@ -8,13 +8,13 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 /**
- * 암복호화
+ * 암호 관련 유틸리티
  *
  * @author gunha
  * @version 1.0
  * @since 2024-12-27 PM 1:22
  */
-public class EncryptionUtil {
+public class CryptographyUtil {
 
     /**
      * 암호화
